@@ -1,0 +1,32 @@
+- name: Demo backup to MinIO
+  hosts: localhost
+  gather_facts: yes  
+
+  vars:
+    # Use URL Internal K8s because AWX & MinIO are in one cluster
+    minio_endpoint: "http://minio-service.storage.svc.cluster.local:9000"
+    minio_access_key: "minioadmin"
+    minio_secret_key: "minioadmin123"
+    bucket: "backup-demo"
+
+  tasks:
+    - name: Create demo backup file
+      copy:
+        content: |
+          Backup demo dari AWX
+          Date: {{ ansible_date_time.date }}
+          Time: {{ ansible_date_time.time }}
+        dest: /tmp/backup-demo.txt
+
+    - name: Upload to MinIO (S3 Compatible)
+      amazon.aws.s3_object:
+        endpoint_url: "{{ minio_endpoint }}"
+        access_key: "{{ minio_access_key }}"
+        secret_key: "{{ minio_secret_key }}"
+        bucket: "{{ bucket }}"
+        object: "backup-{{ ansible_date_time.epoch }}.txt"
+        src: /tmp/backup-demo.txt
+        mode: put
+        validate_certs: no
+        region: us-east-1
+        

@@ -27,7 +27,7 @@ AKS operations, automation workflows, observability, GitOps, and SRE-aligned pat
 ## High-Level Architecture
 
 ```
-Developer / Interviewer
+User / Developer 
         |
         v
 Terraform (infra/)

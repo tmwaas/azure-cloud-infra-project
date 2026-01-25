@@ -13,12 +13,18 @@ spec:
       labels:
         app: minio
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: minio
           image: minio/minio:latest
           args:
             - server
             - /data
+            - --console-address
+            - ":9002"
           envFrom:
             - secretRef:
                 name: minio-secret
@@ -27,6 +33,7 @@ spec:
               value: public
           ports:
             - containerPort: 9000
+            - containerPort: 9002
           volumeMounts:
             - name: data
               mountPath: /data
