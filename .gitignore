@@ -1,0 +1,20 @@
+# --- Terraform ---
+.terraform/                
+*.tfstate                  
+*.tfstate.backup
+*.tfvars                   
+.terraform.lock.hcl
+
+# --- Kubernetes / AWX ---
+kubeconfig                 
+*admin-secret.yaml         
+
+# --- OS & IDE ---
+.DS_Store                 
+Thumbs.db                  
+.vscode/                   
+
+# --- Python
+__pycache__/
+*.pyc
+.venv/

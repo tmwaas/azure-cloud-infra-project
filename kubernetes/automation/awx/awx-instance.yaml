@@ -1,0 +1,20 @@
+apiVersion: awx.ansible.com/v1beta1
+kind: AWX
+metadata:
+  name: awx
+  namespace: automation 
+spec:
+  web_resource_requirements:
+    requests:
+      cpu: "500m"
+      memory: "4Gi"      
+  task_resource_requirements:
+    requests:
+      cpu: "1000m"
+      memory: "2Gi"    
+  postgres_resource_requirements:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"   
+  service_type: LoadBalancer     
+  

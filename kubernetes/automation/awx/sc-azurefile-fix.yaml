@@ -1,0 +1,15 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azurefile-postgres-fix
+provisioner: file.csi.azure.com
+allowVolumeExpansion: true
+parameters:
+  skuName: Standard_LRS
+mountOptions:
+  - mfsymlinks
+  - actimeo=30
+  - uid=26
+  - gid=26
+  - file_mode=0700
+  - dir_mode=0700
