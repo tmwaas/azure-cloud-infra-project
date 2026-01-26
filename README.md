@@ -1,10 +1,11 @@
-# Azure AKS DevOps Platform 
+
+# Azure AKS DevOps Platform
 
 This repository demonstrates an **enterprise-grade Azure DevOps platform on AKS**, designed to support **secure, scalable, and observable cloud-native workloads**.
 
 The project reflects real-world **DevOps Engineering responsibilities**: designing, implementing, and operating Azure-based infrastructure using **Infrastructure as Code, Kubernetes, CI/CD automation, and observability best practices**.
 
-The application layer is intentionally kept simple so that attention remains on platform reliability and operational excellence:
+The application layer is intentionally kept simple so that attention remains on **platform reliability and operational excellence**:
 AKS operations, automation workflows, observability, GitOps, and SRE-aligned patterns.
 
 ---
@@ -27,7 +28,7 @@ AKS operations, automation workflows, observability, GitOps, and SRE-aligned pat
 ## High-Level Architecture
 
 ```
-User / Developer 
+User / Developer
         |
         v
 Terraform (infra/)
@@ -43,7 +44,7 @@ Azure:
 AKS Platform:
   - AWX Operator & AWX Instance
   - MinIO Object Storage
-  - Backup CronJobs
+  - Backup Jobs
   - Prometheus & Grafana
         |
         v
@@ -61,6 +62,7 @@ Automation:
 azure-cloud-infra-project/
 ├── README.md
 ├── docs/
+│   └── screenshots/
 ├── ansible/
 │   ├── inventories/
 │   └── playbooks/
@@ -84,6 +86,38 @@ azure-cloud-infra-project/
 │   └── observability/
 └── README.md
 ```
+
+---
+
+## Demo Scenario: Automated Backup to Object Storage
+
+This demo validates **end-to-end operational automation** using Kubernetes-native tooling and Ansible automation.
+
+### Flow Overview
+
+1. AWX runs an Ansible playbook
+2. A demo backup artifact is generated
+3. The artifact is uploaded to MinIO (S3-compatible storage)
+4. Backup success is verified via AWX output and MinIO UI
+
+### Demo Evidence
+
+#### AWX Job Execution (Backup to MinIO)
+
+The screenshot below shows a successful AWX job execution where an Ansible playbook:
+- creates a demo backup artifact
+- uploads it to MinIO object storage
+
+![AWX Backup Job Success](docs/screenshots/awx-backup-success.png)
+
+---
+
+#### MinIO Object Storage (Backup Artifact)
+
+The screenshot below confirms that the backup artifact has been successfully stored
+inside the MinIO bucket.
+
+![MinIO Backup Object](docs/screenshots/minio-backup-object.png)
 
 ---
 
@@ -112,4 +146,4 @@ azure-cloud-infra-project/
 
 ## 👤 Author
 
-Thomas Waas 
+Thomas Waas
