@@ -29,4 +29,5 @@
         mode: put
         validate_certs: no
         region: us-east-1
+        encrypt: no
         
