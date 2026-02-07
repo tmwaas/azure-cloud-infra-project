@@ -7,12 +7,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   default_node_pool {
     name                = var.node_pool.name
     vm_size             = var.node_pool.vm_size
-
     enable_auto_scaling = true
     min_count           = var.node_pool.min_count
     max_count           = var.node_pool.max_count
-
-    node_count          = null
     vnet_subnet_id      = var.subnet_id
   }
 
@@ -26,8 +23,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   role_based_access_control_enabled = true
 }
 
-# resource "azurerm_role_assignment" "acr_pull" {
-#  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-#  role_definition_name = "AcrPull"
-#  scope                = var.acr_id
-# }
+resource "azurerm_role_assignment" "acr_pull" {
+ principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+ role_definition_name = "AcrPull"
+ scope                = var.acr_id
+}

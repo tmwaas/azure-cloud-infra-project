@@ -16,7 +16,7 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
   sku                 = "Basic"
-  admin_enabled       = true
+  admin_enabled       = false
 }
 
 module "aks" {
@@ -30,7 +30,6 @@ module "aks" {
   node_pool = {
     name        = "default"
     vm_size     = "Standard_DS2_v2"
-    node_count  = null
     min_count   = 1
     max_count   = 3
   }
