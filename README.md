@@ -113,9 +113,11 @@ Templates are production-ready and designed for enterprise Azure subscriptions.
 
 Azure DevOps YAML pipelines included:
 
+```
 pipelines/
 ├── azure-devops-bicep.yml
 └── azure-devops-terraform.yml
+```
 
 Pipeline capabilities:
 - Bicep validation stage
