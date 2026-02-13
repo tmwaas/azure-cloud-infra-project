@@ -1,68 +1,145 @@
+# Azure AKS & Azure-Native Platform Infrastructure
 
-# Azure AKS DevOps Platform
+This repository demonstrates an enterprise-grade Azure DevOps platform combining:
 
-This repository demonstrates an **enterprise-grade Azure DevOps platform on AKS**, designed to support **secure, scalable, and observable cloud-native workloads**.
+- Terraform-based core infrastructure
+- Azure-native Bicep platform components
+- Azure Kubernetes Service (AKS)
+- Azure Service Bus (event-driven messaging)
+- Managed Identity & secure design patterns
+- CI/CD automation (Azure DevOps)
+- Observability & SRE-aligned practices
 
-The project reflects real-world **DevOps Engineering responsibilities**: designing, implementing, and operating Azure-based infrastructure using **Infrastructure as Code, Kubernetes, CI/CD automation, and observability best practices**.
-
-The application layer is intentionally kept simple so that attention remains on **platform reliability and operational excellence**:
-AKS operations, automation workflows, observability, GitOps, and SRE-aligned patterns.
-
----
-
-## What This Project Proves
-
-- Azure-native AKS platform design
-- Terraform-based infrastructure provisioning
-- Modular and reusable Terraform structure
-- Kubernetes platform operations on AKS
-- AWX (Ansible Automation Platform) on Kubernetes
-- MinIO-based object storage simulation
-- Automated backup workflows using Ansible + AWX
-- Observability with Prometheus & Grafana
-- Production-oriented repository layout
-- SRE / DevOps mindset (automation, monitoring, recovery)
+This project reflects real-world Platform Engineering and DevOps responsibilities:
+designing, implementing, securing, automating, and operating Azure-based infrastructure using Infrastructure as Code.
 
 ---
 
-## High-Level Architecture
+# What This Project Demonstrates
+
+## Core Infrastructure (Terraform)
+- Azure Resource Group provisioning
+- Virtual Network & Subnet configuration
+- Azure Kubernetes Service (AKS) deployment
+- Azure Container Registry (ACR)
+- Modular & reusable Terraform structure
+- Idempotent infrastructure provisioning
+
+## Azure-Native Platform Layer (Bicep)
+- Log Analytics Workspace provisioning
+- Secure Storage Account (TLS 1.2 enforced, public access disabled)
+- Azure Service Bus Namespace
+- User Assigned Managed Identity
+- Infrastructure as Code via Bicep
+- ARM-based idempotent deployments
+
+## Platform Operations (AKS Layer)
+- AWX (Ansible Automation Platform) deployed on AKS
+- MinIO S3-compatible object storage
+- Automated backup workflows
+- Prometheus & Grafana monitoring stack
+
+## Event-Driven Architecture Validation
+- Service Bus queue (test-queue) created
+- Message successfully sent
+- Message successfully received
+
+Demonstrates:
+- Asynchronous communication pattern
+- Decoupled system design
+- Messaging backbone provisioning via IaC
+
+---
+
+# High-Level Architecture
 
 ```
 User / Developer
         |
         v
-Terraform (infra/)
+Terraform (Core Infrastructure)
         |
         v
-Azure:
+Azure Resources:
   - Resource Group
-  - VNet + Subnet
-  - AKS Cluster
-  - Azure Container Registry (ACR)
+  - VNet
+  - AKS
+  - ACR
         |
         v
-AKS Platform:
-  - AWX Operator & AWX Instance
-  - MinIO Object Storage
+Bicep (Azure-Native Platform Layer)
+  - Log Analytics
+  - Secure Storage
+  - Service Bus
+  - Managed Identity
+        |
+        v
+AKS Platform
+  - AWX Automation
+  - MinIO
   - Backup Jobs
   - Prometheus & Grafana
         |
         v
-Automation:
-  - Ansible Playbooks
-  - AWX Jobs
-  - Git-based workflows
-```
+Event Messaging
+  - Service Bus Queue (test-queue)
+  - Send / Receive validation
+```  
 
 ---
 
-## Repository Structure
+# Azure-Native Platform Deployment (Bicep)
+
+Deployment executed using:
+
+az deployment group create \
+  --resource-group <existing-rg> \
+  --template-file bicep/platform/main.bicep \
+  --parameters bicep/platform/parameters.bicepparam
+
+Governance Awareness:
+
+In restricted sandbox environments (e.g., Pluralsight Hands-On Labs):
+
+- RBAC role assignments may be blocked
+- Diagnostic settings may be restricted
+- Service Principal creation may be disallowed
+
+Templates are production-ready and designed for enterprise Azure subscriptions.
+
+---
+
+# CI/CD Integration
+
+Azure DevOps YAML pipelines included:
+
+pipelines/
+├── azure-devops-bicep.yml
+└── azure-devops-terraform.yml
+
+Pipeline capabilities:
+- Bicep validation stage
+- Deployment stage
+- Service Connection integration (enterprise-ready)
+- Branch & path-based triggers
+
+---
+
+# Repository Structure
 
 ```
 azure-cloud-infra-project/
 ├── README.md
 ├── docs/
 │   └── screenshots/
+├── app/
+│   ├── app.py
+│   └── Dockerfile
+│   └── requirements.txt
+├── bicep/
+│   ├── platform/
+│   │   ├── main.bicep
+│   │   └── parameters.bicepparam
 ├── ansible/
 │   ├── inventories/
 │   └── playbooks/
@@ -84,19 +161,34 @@ azure-cloud-infra-project/
 │   │   └── minio/
 │   ├── backup_jobs/
 │   └── observability/
-└── README.md
+├── modules/
+│   ├── aks/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── variables.tf
+│   ├── gitops/
+│   │   └── main.tf
+│   ├── monitoring/
+│   │   └── main.tf
+│   ├── network/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── variables.tf
+├── pipelines/
+│   ├── azure-devops-bicep.yml
+│   └── azure-devops-terraform.yml
 ```
 
 ---
 
-## Demo Scenario: Automated Backup to Object Storage
+# Demo Scenario: Automated Backup to Object Storage
 
 This demo validates **end-to-end operational automation** using Kubernetes-native tooling and Ansible automation.
 
 ### Flow Overview
 
-1. AWX runs an Ansible playbook
-2. A demo backup artifact is generated
+1. AWX executes Ansible playbook
+2. Backup artifact generated
 3. The artifact is uploaded to MinIO (S3-compatible storage)
 4. Backup success is verified via AWX output and MinIO UI
 
@@ -124,7 +216,7 @@ inside the MinIO bucket.
 ## Tooling & Technologies
 
 - Microsoft Azure
-- Terraform
+- Terraform & Bicep
 - Azure Kubernetes Service (AKS)
 - Ansible & AWX
 - MinIO
@@ -133,17 +225,19 @@ inside the MinIO bucket.
 
 ---
 
-## Project Scenarios
+# Engineering Focus Areas
 
-1. Provision AKS using Terraform
-2. Deploy AWX on AKS
-3. Connect AWX to Git repositories
-4. Deploy MinIO object storage
-5. Run automated backup jobs
-6. Observe metrics in Grafana
+- Infrastructure as Code (Terraform & Bicep)
+- Azure Platform Engineering
+- Secure Cloud Design
+- Event-Driven System Patterns
+- Observability & Reliability
+- Governance & RBAC Awareness
+- Enterprise CI/CD Workflows
 
 ---
 
-## 👤 Author
+# Author
 
-Thomas Waas
+Thomas Waas  
+DevOps & Cloud Engineer
